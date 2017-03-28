@@ -15,6 +15,7 @@ public class MuxGate extends Gate {
 		nandGate1 = new NandGate();
 		nandGate2 = new NandGate();
 		notGate = new NotGate();
+		name = "Mux";
 	}
 	@Override
 	public boolean read() {

@@ -12,6 +12,7 @@ public class XorGate extends Gate {
 		nandGate_1 = new NandGate();
 		nandGate_2 = new NandGate();
 		nandGate_3 = new NandGate();
+		name = "Xor";
 	}
 
 	@Override

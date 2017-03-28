@@ -11,6 +11,7 @@ public class OrGate extends Gate {
 		nandGate_0 = new NandGate();
 		nandGate_1 = new NandGate();
 		nandGate_2 = new NandGate();
+		name = "Or";
 		
 	}
 
