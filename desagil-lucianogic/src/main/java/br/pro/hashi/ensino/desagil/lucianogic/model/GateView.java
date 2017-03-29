@@ -27,7 +27,7 @@ public class GateView extends JPanel implements ItemListener {
 	public Switch switcher3;
 	
 	private Gate gate;
-
+	
 	public GateView(Gate gate) {
 		this.gate = gate;
 		
@@ -59,7 +59,7 @@ public class GateView extends JPanel implements ItemListener {
 		resultField.setEnabled(false);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+		
 		if (gate.size == 1) {
 			add(eLabel);
 			add(eField);
@@ -86,9 +86,11 @@ public class GateView extends JPanel implements ItemListener {
 			gate.connect(switcher1, 0);
 			gate.connect(switcher2, 1);
 			gate.connect(switcher3, 2);
-			}
-	}
 
+			}
+		resultField.setSelected(gate.read());
+	}
+			
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 	    Object source = e.getItemSelectable();
@@ -109,6 +111,7 @@ public class GateView extends JPanel implements ItemListener {
 		System.out.println(gate.read());
 		resultField.setSelected(gate.read());
 		resultField.setEnabled(false);
+		
 		
 	  }
 
