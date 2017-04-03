@@ -1,17 +1,28 @@
 package br.pro.hashi.ensino.desagil.lucianogic.model;
 
 import java.awt.event.KeyEvent;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener; 
+import java.net.URL;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 
 import br.pro.hashi.ensino.desagil.lucianogic.model.Gate;
 
-public class GateView extends JPanel implements ItemListener {
+public class GateView extends FixedPanel implements ItemListener, ActionListener, MouseListener{
 
 	private static final long serialVersionUID = 1L;
 	private	JCheckBox eField;
@@ -25,20 +36,33 @@ public class GateView extends JPanel implements ItemListener {
 	public Switch switcher1;
 	public Switch switcher2;
 	public Switch switcher3;
-	
+	public LED led;
 	private Gate gate;
+	private Image image;
+	public JButton button;
+	private Graphics g;
+	int x;
+	int y;
+	//this.addkeyListener(g);
+	//this.addMouseListener(g);
+
 	
 	public GateView(Gate gate) {
+		super(370,220);
 		this.gate = gate;
+
+		x = 225;
+		y = 80;
 		
-		JLabel eLabel = new JLabel("Entrada:");
-		JLabel resultLabel = new JLabel("Saída:");
+		image = loadImage(gate.toString());	
+		JLabel eLabel = new JLabel("");
+		JLabel resultLabel = new JLabel("");
 		
 		switcher1 = new Switch(); 
 		switcher2 = new Switch();
 		switcher3 = new Switch();
 		
-		eField = new JCheckBox("A");
+		eField = new JCheckBox("");
 		eField.setMnemonic(KeyEvent.VK_C); 
 		eField.setSelected(false);
 		
@@ -57,32 +81,30 @@ public class GateView extends JPanel implements ItemListener {
 		eField3.addItemListener(this);
 
 		resultField.setEnabled(false);
-
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		if (gate.size == 1) {
-			add(eLabel);
-			add(eField);
-			add(resultLabel);
-			add(resultField);
+			add(eLabel,100,85,20,20);
+			add(eField,100,85,20,20);
+			//add(resultLabel,215,70,50,50);
+			//add(resultField,215,70,50,50);
 			gate.connect(switcher1, 0);
 		}
 		else if (gate.size == 2) {
-			add(eLabel);
-			add(eField);
-			add(eField2);
-			add(resultLabel);
-			add(resultField);
+			add(eLabel,90,60,20,60);
+			add(eField,90,70,20,20);
+			add(eField2,90,100,20,20);
+			//add(resultLabel,215,70,50,50);
+			//add(resultField,215,70,50,50);
 			gate.connect(switcher1, 0);
 			gate.connect(switcher2, 1);
 		}
 		else {
-			add(eLabel);
-			add(eField);
-			add(eField2);
-			add(eField3);
-			add(resultLabel);
-			add(resultField);
+			add(eLabel,0,10,10,10);
+			add(eField,0,10,10,10);
+			add(eField2,0,10,10,10);
+			add(eField3,0,10,10,10);
+			//add(resultLabel,0,10,10,10);
+			//add(resultField,0,10,10,10);
 			gate.connect(switcher1, 0);
 			gate.connect(switcher2, 1);
 			gate.connect(switcher3, 2);
@@ -114,6 +136,63 @@ public class GateView extends JPanel implements ItemListener {
 		
 		
 	  }
+	private Image loadImage(String filename) {
+		URL url = getClass().getResource("/img/" + filename + ".png");
+		ImageIcon icon = new ImageIcon(url);
+		return icon.getImage();
+	}
 
+
+	@Override
+	public void paintComponent(Graphics g) {
+		g.drawImage(image, 115, 60, 120, 70, null);
+		g.setColor(Color.orange);
+		g.fillOval(225,80,30,30);
+		
+
+		// Evita bugs visuais em alguns sistemas operacionais.
+		getToolkit().sync();
+    }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Color color = JColorChooser.showDialog(this, null, null);
+
+		if(color != null) {
+			button.setBackground(color);
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	    int screenX = e.getXOnScreen();
+	    int screenY = e.getYOnScreen();
+	    System.out.println("screen(X,Y) = " + screenX + "," + screenY);
+	  }
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("hello");
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	}
 
