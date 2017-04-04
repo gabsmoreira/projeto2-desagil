@@ -43,14 +43,13 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 	private Graphics g;
 	int x;
 	int y;
-	//this.addkeyListener(g);
-	//this.addMouseListener(g);
-
+	Color color;
 	
 	public GateView(Gate gate) {
 		super(370,220);
 		this.gate = gate;
-
+		led = new LED(255,0,0);
+		led.connect(gate, 0);
 		x = 225;
 		y = 80;
 		
@@ -81,6 +80,7 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 		eField3.addItemListener(this);
 
 		resultField.setEnabled(false);
+		this.addMouseListener(this);
 		
 		if (gate.size == 1) {
 			add(eLabel,100,85,20,20);
@@ -99,10 +99,10 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 			gate.connect(switcher2, 1);
 		}
 		else {
-			add(eLabel,0,10,10,10);
-			add(eField,0,10,10,10);
-			add(eField2,0,10,10,10);
-			add(eField3,0,10,10,10);
+			add(eLabel,90,60,20,60);
+			add(eField,97,65,20,20);
+			add(eField2,97,95,20,20);			
+			add(eField3,165,125,20,20);
 			//add(resultLabel,0,10,10,10);
 			//add(resultField,0,10,10,10);
 			gate.connect(switcher1, 0);
@@ -130,9 +130,11 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 	    	switcher3.setOn(C);
 	    }
 	    	
-		System.out.println(gate.read());
-		resultField.setSelected(gate.read());
-		resultField.setEnabled(false);
+		//System.out.println(led.isOn());
+		this.repaint();
+		//resultField.setSelected(gate.read());
+		//resultField.setEnabled(false);
+		
 		
 		
 	  }
@@ -146,34 +148,51 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(image, 115, 60, 120, 70, null);
-		g.setColor(Color.orange);
-		g.fillOval(225,80,30,30);
+		color = new Color(led.getR(),led.getG(),led.getB());
+		if (led.isOn() == true){
+			g.setColor(color);
+			g.fillOval(225,80,30,30);
+		}
+		else{
+			g.setColor(Color.black);
+			g.fillOval(225,80,30,30);
+
+		}
+		
+		
 		
 
 		// Evita bugs visuais em alguns sistemas operacionais.
 		getToolkit().sync();
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Color color = JColorChooser.showDialog(this, null, null);
-
-		if(color != null) {
-			button.setBackground(color);
-		}
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 	    int screenX = e.getXOnScreen();
 	    int screenY = e.getYOnScreen();
-	    System.out.println("screen(X,Y) = " + screenX + "," + screenY);
-	  }
+	    //System.out.println(screenX + " " +screenY);
+	    if ( screenX>=225 && screenX<= 260 ) {
+	    	if ( screenY>=155  && screenY<= 180){
+	    		Color color = JColorChooser.showDialog(this, null, null);
+	    		System.out.println(color);
+
+	    		if(color != null) {
+	    			led = new LED(color.getRed(),color.getGreen(),color.getBlue());
+	    			led.connect(gate, 0);
+	    			this.repaint();
+	    			//g.setColor(color);
+	    			//g.fillOval(225,80,30,30);
+	    		}
+	    	}
+	    	} 
+	    	
+	    }
+	  
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("hello");
 		
 	}
 
@@ -191,6 +210,12 @@ public class GateView extends FixedPanel implements ItemListener, ActionListener
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
